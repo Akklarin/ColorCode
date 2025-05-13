@@ -5,12 +5,14 @@ from dictionaries import cod_dict
 
 
 class MixerWindow(tk.Toplevel):
-    def __init__(self, master, shared_entry):
+    def __init__(self, master, shared_entry, mode_var):
         super().__init__(master)
         self.place_next_to(master)
         self.title("Микшер")
         self.shared_entry = shared_entry
+        self.mode_var = mode_var
         self.mixer = ColorMixer()
+        self.protocol("WM_DELETE_WINDOW", self.on_close)
 
         self.right_frame = tk.LabelFrame(self, text="Замес", font=("Arial", 8), width=150, height=340)
         self.list_frame = tk.Frame(self.right_frame, width=150, height=300)
@@ -36,6 +38,11 @@ class MixerWindow(tk.Toplevel):
         self.canvas = tk.Canvas(self.canvas_frame, bg="white")
         self.canvas.pack(side="left", fill="both", expand=True)
 
+    def on_close(self):
+        self.mode_var.set(1)
+        self.shared_entry.delete(0, tk.END)
+        self.destroy()
+
     def place_next_to(self, master):
         master.update_idletasks()
         x = master.winfo_x()
@@ -56,7 +63,7 @@ class MixerWindow(tk.Toplevel):
     def update_canvas(self):
         result_color = self.mixer.mix_colors()
         self.canvas.delete("all")
-        self.rect = self.canvas.create_rectangle(10, 10, 200, 200, fill=result_color, outline='black')
+        self.canvas.create_rectangle(10, 10, 200, 200, fill=result_color, outline='black')
 
     def update_shared_entry(self):
         result_color = self.mixer.mix_colors()

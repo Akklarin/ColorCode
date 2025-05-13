@@ -22,7 +22,7 @@ class App:
 
         tk.Radiobutton(self.radioframe, text="Базовый", variable=self.mode_var, value=1,
                        command=self.on_mode_change).pack(side='left')
-        tk.Radiobutton(self.radioframe, text="Микшер", variable=self.mode_var, value=2,
+        tk.Radiobutton(self.radioframe, text="Mикшер", variable=self.mode_var, value=2,
                        command=self.on_mode_change).pack(side='right')
 
         self.button_frame = tk.Frame(master)
@@ -48,11 +48,12 @@ class App:
         mode = self.mode_var.get()
         if mode == 2:
             if self.mixer_window is None or not self.mixer_window.winfo_exists():
-                self.mixer_window = MixerWindow(self.master, self.e)
+                self.mixer_window = MixerWindow(self.master, self.e, self.mode_var)
                 self.lab['text'] = ''
                 self.e.delete(0, 'end')
         else:
             if self.mixer_window and self.mixer_window.winfo_exists():
+                self.e.delete(0, 'end')
                 self.mixer_window.destroy()
                 self.mixer_window = None
 
