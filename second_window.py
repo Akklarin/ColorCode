@@ -26,7 +26,7 @@ class MixerWindow(tk.Toplevel):
         self.listbox.pack(fill="both", padx=2, expand=True)
 
         self.reset_button = tk.Button(self.button_frame, text="Сброс", font=("Arial", 8), command=self.reset)
-        self.back_button = tk.Button(self.button_frame, text="Шаг назад", font=("Arial", 8), command=self.step_back)
+        self.back_button = tk.Button(self.button_frame, text="Назад", font=("Arial", 8), command=self.step_back)
 
         self.back_button.grid(row=0, column=0, sticky="ew", padx=2, pady=5)
         self.reset_button.grid(row=0, column=1, sticky="ew", padx=2, pady=5)

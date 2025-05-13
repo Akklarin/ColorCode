@@ -9,11 +9,14 @@ class App:
         self.master = master
         self.set_window_geometry()
         self.mode_var = tk.IntVar(value=1)
+        self.master.bind_all("<Control-KeyPress>", self.on_ctrl_key)
         self.mixer_window = None
         self.current_color = None
 
         self.lab = tk.Label(master, text='', font='Arial 10')
         self.e = tk.Entry(master, width=16, font='Arial 16', justify='center')
+        self.e.bind("<Control-KeyPress>", self.on_ctrl_key)
+
         self.lab.pack()
         self.e.pack()
 
@@ -43,6 +46,24 @@ class App:
         w = self.master.winfo_screenwidth() // 2 - 300
         h = self.master.winfo_screenheight() // 2 - 75
         self.master.geometry('200x340+{}+{}'.format(w, h))
+
+    def on_ctrl_key(self, event):
+        if event.state & 0x4:
+            if event.keycode == 67:
+                self.copy_content()
+            elif event.keycode == 90:
+                self.try_step_back()
+
+    def copy_content(self, event=None):
+        content = self.e.get()
+        self.master.clipboard_clear()
+        self.master.clipboard_append(content)
+        self.master.update()
+
+    def try_step_back(self, event=None):
+        if self.mode_var.get() == 2:
+            if hasattr(self, "mixer_window") and self.mixer_window.winfo_exists():
+                self.mixer_window.step_back()
 
     def on_mode_change(self):
         mode = self.mode_var.get()
