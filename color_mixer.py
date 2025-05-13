@@ -7,6 +7,10 @@ class ColorMixer:
     def add_color(self, hex_color: str):
         self.colors.append(hex_color)
 
+    def step_back(self):
+        if len(self.colors) > 0:
+            self.colors.pop()
+
     def mix_colors(self) -> str:
         if not self.colors:
             return "#ffffff"  # белый по умолчанию
