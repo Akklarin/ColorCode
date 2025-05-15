@@ -63,7 +63,24 @@ class MixerWindow(tk.Toplevel):
     def update_canvas(self):
         result_color = self.mixer.mix_colors()
         self.canvas.delete("all")
-        self.canvas.create_rectangle(10, 10, 200, 200, fill=result_color, outline='black')
+
+        rect_width = 200
+        rect_height = 200
+
+        canvas_width = self.canvas.winfo_width()
+        canvas_height = self.canvas.winfo_height()
+
+        if canvas_width == 1 and canvas_height == 1:
+            self.canvas.update_idletasks()
+            canvas_width = self.canvas.winfo_width()
+            canvas_height = self.canvas.winfo_height()
+
+        x0 = (canvas_width - rect_width) // 2
+        y0 = (canvas_height - rect_height) // 2
+        x1 = x0 + rect_width
+        y1 = y0 + rect_height
+
+        self.canvas.create_rectangle(x0, y0, x1, y1, fill=result_color, outline='black')
 
     def update_shared_entry(self):
         result_color = self.mixer.mix_colors()
