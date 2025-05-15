@@ -1,3 +1,4 @@
+"""Defines the MixerWindow class providing a GUI for mixing colors."""
 
 import tkinter as tk
 from color_mixer import ColorMixer
@@ -5,7 +6,30 @@ from dictionaries import cod_dict
 
 
 class MixerWindow(tk.Toplevel):
+    """Mixer window for combining multiple colors and displaying the result.
+
+    Attributes:
+        shared_entry (tk.Entry): Entry widget shared with the main window.
+        mode_var (tk.IntVar): Variable indicating current mode.
+        mixer (ColorMixer): Instance managing color mixing logic.
+        right_frame (tk.LabelFrame): Frame containing the listbox and buttons.
+        list_frame (tk.Frame): Frame containing the listbox.
+        button_frame (tk.Frame): Frame containing control buttons.
+        listbox (tk.Listbox): Listbox displaying added colors.
+        reset_button (tk.Button): Button to reset the mixer.
+        back_button (tk.Button): Button to step back one color.
+        canvas_frame (tk.LabelFrame): Frame containing the result canvas.
+        canvas (tk.Canvas): Canvas to display the mixed color.
+    """
+
     def __init__(self, master, shared_entry, mode_var):
+        """Initialize the mixer window and its widgets.
+
+        Args:
+            master (tk.Widget): The parent window.
+            shared_entry (tk.Entry): Entry widget shared with the main window.
+            mode_var (tk.IntVar): Variable tracking the current mode.
+        """
         super().__init__(master)
         self.place_next_to(master)
         self.title("Микшер")
@@ -39,11 +63,13 @@ class MixerWindow(tk.Toplevel):
         self.canvas.pack(side="left", fill="both", expand=True)
 
     def on_close(self):
+        """Handle window close event, reset mode and clear entry."""
         self.mode_var.set(1)
         self.shared_entry.delete(0, tk.END)
         self.destroy()
 
     def place_next_to(self, master):
+        """Position this window to the right of the master window."""
         master.update_idletasks()
         x = master.winfo_x()
         y = master.winfo_y()
@@ -55,12 +81,14 @@ class MixerWindow(tk.Toplevel):
         self.geometry(f"600x340+{new_x}+{new_y}")
 
     def add_color(self, hex_color: str):
+        """Add a color to the mixer and update the UI."""
         self.mixer.add_color(hex_color)
         self.listbox.insert(tk.END, ' ' + cod_dict[hex_color])
         self.update_canvas()
         self.update_shared_entry()
 
     def update_canvas(self):
+        """Redraw the color mixing result rectangle centered on the canvas."""
         result_color = self.mixer.mix_colors()
         self.canvas.delete("all")
 
@@ -83,17 +111,20 @@ class MixerWindow(tk.Toplevel):
         self.canvas.create_rectangle(x0, y0, x1, y1, fill=result_color, outline='black')
 
     def update_shared_entry(self):
+        """Update the shared entry widget with the mixed color value."""
         result_color = self.mixer.mix_colors()
         self.shared_entry.delete(0, tk.END)
         self.shared_entry.insert(0, result_color)
 
     def reset(self):
+        """Reset the mixer, clearing all colors and UI elements."""
         self.mixer.colors.clear()
         self.listbox.delete(0, tk.END)
         self.canvas.delete("all")
         self.shared_entry.delete(0, tk.END)
 
     def step_back(self):
+        """Remove the last added color and update the UI."""
         self.listbox.delete(tk.END)
         self.mixer.step_back()
         self.update_canvas()

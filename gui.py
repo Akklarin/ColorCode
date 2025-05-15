@@ -1,3 +1,5 @@
+"""Entry point for the ColorCode Mixer application."""
+
 import tkinter as tk
 from main_window import App
 
